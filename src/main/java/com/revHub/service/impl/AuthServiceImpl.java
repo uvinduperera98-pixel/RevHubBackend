@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // Fixed password check: added '!' so it throws an error if passwords DO NOT match
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid username or password");
         }
 
