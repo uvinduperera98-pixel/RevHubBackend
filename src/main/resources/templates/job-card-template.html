@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>RevHub Job Card</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0mm 0mm 15mm 0mm; /* Top, Right, Bottom, Left */
+            @bottom-center {
+                content: element(footer);
+            }
+        }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1E293B; font-size: 11px; line-height: 1.4; margin: 0; padding: 0; background-color: #FFFFFF; }
+
+        /* --- Header --- */
+        .header-section { background-color: #000000; color: #FFFFFF; padding: 25px 35px 20px 35px; }
+        .header-table { width: 100%; border-collapse: collapse; }
+        .logo-cell { width: 45%; vertical-align: middle; }
+        .company-info-cell { width: 25%; font-size: 11px; color: #D1D5DB; line-height: 1.5; vertical-align: middle; }
+        .job-card-meta-cell { width: 30%; vertical-align: top; text-align: right; }
+        .job-card-title { font-size: 22px; font-weight: 900; color: #FFFFFF; text-transform: uppercase; }
+        .meta-box { border-collapse: collapse; width: 200px; float: right; margin-bottom: 5px; }
+        .meta-label { background-color: #E31E24; color: #FFFFFF; font-weight: bold; text-transform: uppercase; width: 45%; text-align: center; padding: 5px; }
+        .meta-value { background-color: #FFFFFF; color: #000000; font-weight: bold; text-align: center; border: 1px solid #D1D5DB; padding: 5px; }
+        .meta-value-dark { background-color: #111827; color: #FFFFFF; font-weight: bold; text-align: center; border: 1px solid #111827; padding: 5px; }
+        .red-bar { height: 5px; background-color: #E31E24; width: 100%; }
+
+        /* --- Content --- */
+        .page {position: relative;}
+        .content {padding: 20px 35px 80px 35px;}
+        .section-header-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        .section-icon-cell { background-color: #E31E24; width: 28px; text-align: center; height: 24px; }
+        .section-title-cell { background-color: #111827; color: #FFFFFF; font-weight: bold; padding-left: 10px; text-transform: uppercase; }
+        .icon-svg { fill: #FFFFFF; width: 13px; height: 13px; }
+        .grid-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+        .grid-col { width: 48%; vertical-align: top; }
+        .grid-spacer { width: 4%; }
+        .info-table { width: 100%; border-collapse: collapse; }
+        .info-table td { padding: 4px 2px; }
+        .field-label { font-weight: bold; width: 35%; }
+        .field-value { width: 60%; color: #334155; }
+
+        .panel-box { border: 1px solid #E2E8F0; border-left: 3px solid #E31E24; padding: 10px; margin-bottom: 15px; background-color: #F8FAFC; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .items-table th { background-color: #E31E24; color: #FFFFFF; font-weight: bold; padding: 6px 8px; text-transform: uppercase; }
+        .items-table td { padding: 7px 8px; border: 1px solid #E2E8F0; }
+
+        .bottom-grid-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .bottom-card { border: 1px solid #E2E8F0; padding: 10px; }
+        .footer-section {
+            background-color: #000000;
+            color: #FFFFFF;
+            text-align: center;
+            position: running(footer);
+            padding: 1px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-section">
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <div style="font-size: 45px; font-weight: bolder; font-style: italic ; letter-spacing: -1px;">
+                    <span style="color:#FFFFFF;">Rev</span><span style="color:#E31E24;">Hub</span>
+                </div>
+                <div style="font-size: 8px; color:#94A3B8; letter-spacing: 2px; text-transform:uppercase; margin-top:1px;">Auto Solutions and Detailing</div>
+            </td>
+            <td class="company-info-cell">
+                ABN: 16195791510<br/>
+                04 Eastbourne Crescent<br/>
+                Officer, VIC 3809<br/>
+                0422 533 385<br/>
+                revhubauto@gmail.com
+            </td>
+            <td class="job-card-meta-cell">
+                <div class="job-card-title">Job Card</div>
+                <table class="meta-box">
+                    <tr><td class="meta-label">Job No</td><td class="meta-value" th:text="${'JC-' + #numbers.formatInteger(jobCard.jobId, 6)}">N/A</td></tr>
+                    <tr><td class="meta-label" style="background-color: #111827;">Date</td><td class="meta-value-dark" th:text="${#temporals.format(jobCard.createdDate, 'dd/MM/yyyy HH:mm')}">N/A</td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="red-bar"></div>
+<div class="page">
+<div class="content">
+
+    <table class="grid-table">
+        <tr>
+            <td class="grid-col">
+                <table class="section-header-table">
+                    <tr>
+                        <td class="section-icon-cell">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>
+                        </td>
+                        <td class="section-title-cell">Customer Details</td>
+                    </tr>
+                </table>
+
+                <table class="info-table">
+                    <tr>
+                        <td class="field-label">Customer Name</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.customer.customerName}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Phone Number</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.customer.contactNumber}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Email</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.customer.email}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Address</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.customer.customerAddress}">N/A</td>
+                    </tr>
+                </table>
+            </td>
+
+            <td class="grid-spacer"></td>
+
+            <td class="grid-col">
+                <table class="section-header-table">
+                    <tr>
+                        <td class="section-icon-cell">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1s.67-1 1-1 1.5.67 1.5 1-.67 1-1.5 1zm11 0c-.83 0-1.5-.67-1.5-1s.67-1 1-1 1.5.67 1.5 1-.67 1-1.5 1zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                        </td>
+                        <td class="section-title-cell">Vehicle Details</td>
+                    </tr>
+                </table>
+
+                <table class="info-table">
+                    <tr th:if="${jobCard.vehicle.vehicleRegNo != null and jobCard.vehicle.vehicleRegNo != 'N/A' and jobCard.vehicle.vehicleRegNo != ''}">
+                        <td class="field-label">Registration No</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" style="font-weight: bold;" th:text="${jobCard.vehicle.vehicleRegNo}">N/A</td>
+                    </tr>
+                    <tr th:if="${jobCard.vehicle.vehicleVinNo != null and jobCard.vehicle.vehicleVinNo != 'N/A' and jobCard.vehicle.vehicleVinNo != ''}">
+                        <td class="field-label">Vin No</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" style="font-weight: bold;" th:text="${jobCard.vehicle.vehicleVinNo}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Make / Model</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.vehicleMake + ' ' + jobCard.vehicle.vehicleModel}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Year</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.vehicleYear}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Color</td>
+                        <td class="field-splitter">:</td>
+                        <td class="field-value" th:text="${jobCard.vehicle.colour}">N/A</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="section-header-table">
+        <tr>
+            <td class="section-icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </td>
+            <td class="section-title-cell">Customer Complaint</td>
+        </tr>
+    </table>
+    <div class="panel-box" th:text="${jobCard.customerComplaintText}">
+        N/A
+    </div>
+
+    <table class="section-header-table">
+        <tr>
+            <td class="section-icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.1z"/></svg>
+            </td>
+            <td class="section-title-cell">Work Done</td>
+        </tr>
+    </table>
+
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th style="width: 10%;">No</th>
+            <th style="width: 75%;">Service / Part Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="activity, iterStat : ${jobCard.laborActivities}">
+            <td class="text-center" th:text="${iterStat.count}">N/A</td>
+            <td th:text="${activity.activityName}">N/A</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Technician Summary Section -->
+    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #E2E8F0; border-left: 3px solid #E31E24; background-color: #F8FAFC;">
+        <div style="font-weight: bold; font-size: 10px; color: #1E293B; text-transform: uppercase; margin-bottom: 5px;">Assigned Technician(s):</div>
+        <div style="color: #334155; font-size: 12px;" th:text="${#strings.listJoin(jobCard.technicians.![technicianName], ', ')}">Not Assigned</div>
+    </div>
+
+    <!-- Authorization -->
+    <table class="bottom-grid-table">
+        <tr>
+            <td class="grid-col">
+                <table class="section-header-table">
+                    <tr>
+                        <td class="section-icon-cell" style="background-color: #111827;">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4.84 12.3 0 10 0S5.6.84 5.18 3H1c-.55 0-1 .45-1 1v16c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-9 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5 14H5v-2h10v2zm0-4H5v-2h10v2zm0-4H5V7h10v2z"/></svg>
+                        </td>
+                        <td class="section-title-cell" style="background-color: #111827;">Job Information</td>
+                    </tr>
+                </table>
+                <div class="bottom-card">
+                    <table class="info-table">
+                        <tr>
+                            <td class="field-label" style="width: 45%;">Job Received By</td>
+                            <td class="field-splitter">:</td>
+                            <td class="field-value"
+                                th:text="${jobCard.createdUser} ?: 'N/A'">
+                                N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-label">Date/Time Received</td>
+                            <td class="field-splitter">:</td>
+                            <td class="field-value"
+                                th:text="${#temporals.format(jobCard.createdDate, 'dd/MM/yyyy HH:mm')}">
+                                N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-label">Actual Delivery</td>
+                            <td class="field-splitter">:</td>
+                            <td class="field-value"
+                                th:text="${#temporals.format(jobCard.createdDate, 'dd/MM/yyyy HH:mm')}">
+                                N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-label">Job Status</td>
+                            <td class="field-splitter">:</td>
+                            <td class="field-value"
+                                th:text="${jobCard.status} ?: 'N/A'">
+                                N/A
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+
+            <td class="grid-spacer"></td>
+
+            <td class="grid-col">
+                <table class="section-header-table">
+                    <tr>
+                        <td class="section-icon-cell" style="background-color: #111827;">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        </td>
+                        <td class="section-title-cell" style="background-color: #111827;">Authorized By</td>
+                    </tr>
+                </table>
+                <div class="bottom-card">
+                    <table class="info-table">
+                        <tr>
+                            <td class="field-label" style="width: 40%;">User Name</td>
+                            <td class="field-splitter">:</td>
+                            <td class="field-value" style="width: 55%;"
+                                th:text="${user != null and !#strings.isEmpty(user.fullName)} ? ${user.fullName} : 'N/A'">
+                                N/A
+                            </td>
+                        </tr>
+                        <tr style="height: 32px;">
+                            <td class="field-label" style="vertical-align: bottom; padding-bottom: 2px;">Signature</td>
+                            <td class="field-splitter" style="vertical-align: bottom; padding-bottom: 2px;">:</td>
+                            <td class="field-value" style="vertical-align: bottom; border-bottom: 1px dashed #64748B; font-style: italic; color: #475569; padding-bottom: 2px;">
+                                &#160;&#160;Kaveesha
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field-label" style="padding-top: 6px;">Date</td>
+                            <td class="field-splitter" style="padding-top: 6px;">:</td>
+                            <td class="field-value" style="padding-top: 6px;" th:text="${#temporals.format(jobCard.lastModifiedDate, 'dd / MM / yyyy')}">N/A</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</div>
+    <div class="footer-section">
+        <div class="footer-text">
+            THANK YOU FOR CHOOSING <span>REVHUB</span>!
+        </div>
+        <div class="footer-subtext">
+            Drive Safe, We Care.
+        </div>
+    </div>
+
+</body>
+</html>
