@@ -55,6 +55,12 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        // Vehicle catalog sync - TEMPORARY TEST ACCESS
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/vehicle-catalog/sync"
+                        ).permitAll()
+
                         // All other APIs require JWT
                         .anyRequest().authenticated()
                 )
