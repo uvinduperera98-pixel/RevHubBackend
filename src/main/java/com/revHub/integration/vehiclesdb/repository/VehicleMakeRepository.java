@@ -16,13 +16,13 @@ public interface VehicleMakeRepository
     );
 
     @Query("""
-        SELECT new com.revHub.dto.response.VehicleMakeResponseDTO(
-            vm.id as makeId,
-            vm.normalizedName as name
-        )
-        FROM VehicleMake vm
-        WHERE vm.active = true
-        ORDER BY vm.normalizedName
-        """)
+    SELECT new com.revHub.dto.response.VehicleMakeResponseDTO(
+        vm.id,
+        vm.normalizedName
+    )
+    FROM VehicleMake vm
+    WHERE vm.active = true
+    ORDER BY vm.normalizedName
+    """)
     List<VehicleMakeResponseDTO> findAllVehicleMakeIdAndName();
 }

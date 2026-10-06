@@ -23,16 +23,16 @@ public interface VehicleModelRepository
     );
 
     @Query("""
-        SELECT new com.revHub.dto.response.VehicleModelResponseDTO(
-            vm.id as id,
-            vm.make.id as makeId,
-            vm.normalizedName as name
-        )
-        FROM VehicleModel vm
-        WHERE vm.make.id = :makeId
-        AND vm.active = true
-        ORDER BY vm.normalizedName
-        """)
+    SELECT new com.revHub.dto.response.VehicleModelResponseDTO(
+        vm.id,
+        vm.make.id,
+        vm.normalizedName
+    )
+    FROM VehicleModel vm
+    WHERE vm.make.id = :makeId
+    AND vm.active = true
+    ORDER BY vm.normalizedName
+    """)
     List<VehicleModelResponseDTO> findAllVehicleModelIdAndNameByMakeId(
             @Param("makeId") Long makeId
     );
