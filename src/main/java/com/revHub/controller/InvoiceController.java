@@ -5,6 +5,7 @@ import com.revHub.dto.request.InvoiceSaveRequestDTO;
 import com.revHub.dto.request.InvoiceSearchRequestDTO;
 import com.revHub.dto.response.InvoiceResponseDTO;
 import com.revHub.dto.response.InvoiceTableViewResponseDTO;
+import com.revHub.dto.response.PdfPreviewResponseDTO;
 import com.revHub.service.InvoiceService;
 import com.revHub.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,13 @@ public class InvoiceController {
     @GetMapping("/get-invoice-pdf-by-invoiceId/{invoiceId}")
     public ResponseEntity<StandardResponse> getInvoicePdfById(@PathVariable Long invoiceId) {
 
-        byte[] pdfBytes = invoiceService.getInvoicePdfById(invoiceId);
+        PdfPreviewResponseDTO pdfPreviewResponseDTO = invoiceService.getInvoicePdfById(invoiceId);
 
         return ResponseEntity.ok(
                 new StandardResponse(
                         HttpStatus.OK.value(),
                         "Invoice PDF fetched successfully",
-                        pdfBytes
+                        pdfPreviewResponseDTO
                 )
         );
     }

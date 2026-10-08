@@ -56,7 +56,7 @@ public class JobCardServiceImpl implements JobCardService {
 
     @Override
     @Transactional
-    public byte[] saveJobCard(JobCardSaveRequestDTO dto) {
+    public PdfPreviewResponseDTO saveJobCard(JobCardSaveRequestDTO dto) {
         Vehicle vehicle;
         Customer customer;
 
@@ -158,7 +158,7 @@ public class JobCardServiceImpl implements JobCardService {
 
     @Override
     @Transactional
-    public byte[] updateJobCard(JobCardModifyRequestDTO dto) {
+    public PdfPreviewResponseDTO updateJobCard(JobCardModifyRequestDTO dto) {
         JobCard jobCard = jobCardRepository.findByJobId(dto.getJobId())
                 .orElseThrow(() -> new NotFoundException("Job Card not found with ID: " + dto.getJobId()));
 
@@ -244,7 +244,7 @@ public class JobCardServiceImpl implements JobCardService {
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] getJobCardPdfById(Long jobId) {
+    public PdfPreviewResponseDTO getJobCardPdfById(Long jobId) {
         JobCard jobCard = jobCardRepository.findByJobId(jobId)
                 .orElseThrow(() ->
                         new NotFoundException("Job Card not found with ID: " + jobId));
@@ -262,7 +262,7 @@ public class JobCardServiceImpl implements JobCardService {
         return invoiceRepository.findPendingJobNumbers();
     }
 
-    private byte[] generateJobCardPdf(JobCard jobCard) throws Exception {
+    private PdfPreviewResponseDTO generateJobCardPdf(JobCard jobCard) throws Exception {
         // Re-generate the updated document using Thymeleaf and HTML rendering pipeline engine
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -288,12 +288,15 @@ public class JobCardServiceImpl implements JobCardService {
 
         // 3. Render out the PDF bytes safely
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            PdfPreviewResponseDTO pdfDto = new PdfPreviewResponseDTO();
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             builder.withHtmlContent(processedHtml, "/");
             builder.toStream(out);
             builder.run();
-            return out.toByteArray();
+            pdfDto.setId(jobCard.getJobId());
+            pdfDto.setPdfBytes(out.toByteArray());
+            return pdfDto;
         }
     }
 }

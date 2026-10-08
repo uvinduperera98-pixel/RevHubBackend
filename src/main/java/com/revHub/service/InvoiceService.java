@@ -5,6 +5,7 @@ import com.revHub.dto.request.InvoiceSaveRequestDTO;
 import com.revHub.dto.request.InvoiceSearchRequestDTO;
 import com.revHub.dto.response.InvoiceResponseDTO;
 import com.revHub.dto.response.InvoiceTableViewResponseDTO;
+import com.revHub.dto.response.PdfPreviewResponseDTO;
 import com.revHub.util.StandardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface InvoiceService {
 
     Page<InvoiceTableViewResponseDTO> searchInvoices(InvoiceSearchRequestDTO request, Pageable pageable);
 
-    byte[] getInvoicePdfById(Long invoiceId);
+    PdfPreviewResponseDTO getInvoicePdfById(Long invoiceId);
 
     InvoiceResponseDTO getInvoiceById(Long invoiceId);
 

@@ -189,13 +189,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice = invoiceRepository.save(invoice);
 
         try {
-            byte[] pdfBytes = generateInvoicePdf(invoice, invoiceGroups);
+            PdfPreviewResponseDTO pdfPreviewResponseDTO = generateInvoicePdf(invoice, invoiceGroups);
 
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("invoiceNumber", invoice.getInvoiceNumber());
             responseData.put("invoiceId", invoice.getInvoiceId());
             responseData.put("grandTotal", invoice.getGrandTotal());
-            responseData.put("pdfBytes", pdfBytes);
+            responseData.put("pdfPreviewResponseDTO", pdfPreviewResponseDTO);
 
             return responseData;
 
@@ -214,7 +214,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
-    private byte[] generateInvoicePdf(Invoice invoice, List<InvoiceGroupView> invoiceGroups) throws Exception {
+    private PdfPreviewResponseDTO generateInvoicePdf(Invoice invoice, List<InvoiceGroupView> invoiceGroups) throws Exception {
         // Re-generate the updated document using Thymeleaf and HTML rendering pipeline engine
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -251,12 +251,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // 3. Render out the PDF bytes safely
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            PdfPreviewResponseDTO pdfPreviewResponseDTO=new PdfPreviewResponseDTO();
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             builder.withHtmlContent(processedHtml, "/");
             builder.toStream(out);
             builder.run();
-            return out.toByteArray();
+            pdfPreviewResponseDTO.setId(invoice.getInvoiceId());
+            pdfPreviewResponseDTO.setPdfBytes(out.toByteArray());
+            return pdfPreviewResponseDTO;
         }
     }
 
@@ -339,7 +342,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] getInvoicePdfById(Long invoiceId) {
+    public PdfPreviewResponseDTO getInvoicePdfById(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoicesByInvoiceId(invoiceId)
                 .orElseThrow(() ->
                         new NotFoundException("Invoice not found with ID: " + invoiceId));
@@ -591,13 +594,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         try {
 
-            byte[] pdfBytes = generateInvoicePdf(invoice, invoiceGroups);
+            PdfPreviewResponseDTO pdfPreviewResponseDTO = generateInvoicePdf(invoice, invoiceGroups);
 
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("invoiceNumber", invoice.getInvoiceNumber());
             responseData.put("invoiceId", invoice.getInvoiceId());
             responseData.put("grandTotal", invoice.getGrandTotal());
-            responseData.put("pdfBytes", pdfBytes);
+            responseData.put("pdfPreviewResponseDTO", pdfPreviewResponseDTO);
 
             return responseData;
 

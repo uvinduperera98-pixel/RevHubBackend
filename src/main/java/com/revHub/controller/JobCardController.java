@@ -3,10 +3,7 @@ package com.revHub.controller;
 import com.revHub.dto.request.JobCardModifyRequestDTO;
 import com.revHub.dto.request.JobCardSaveRequestDTO;
 import com.revHub.dto.request.JobCardSearchRequestDTO;
-import com.revHub.dto.response.JobCardNumberResponseDTO;
-import com.revHub.dto.response.JobCardResponseDto;
-import com.revHub.dto.response.JobCardResponseProjection;
-import com.revHub.dto.response.JobCardTableViewResponseDTO;
+import com.revHub.dto.response.*;
 import com.revHub.service.JobCardService;
 import com.revHub.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +26,13 @@ public class JobCardController {
 
     @PostMapping("/save")
     public ResponseEntity<StandardResponse> saveJobCard(@RequestBody JobCardSaveRequestDTO dto) {
-        byte[] pdfBytes = jobCardService.saveJobCard(dto);
+        PdfPreviewResponseDTO pdfPreviewResponseDTO = jobCardService.saveJobCard(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new StandardResponse(
                         HttpStatus.CREATED.value(),
                         "Job Card Processed Successfully",
-                        pdfBytes
+                        pdfPreviewResponseDTO
                 )
         );
     }
@@ -43,13 +40,13 @@ public class JobCardController {
     @PutMapping("/modify")
     public ResponseEntity<StandardResponse> updateJobCard(@RequestBody JobCardModifyRequestDTO dto) {
 
-        byte[] pdfBytes = jobCardService.updateJobCard(dto);
+        PdfPreviewResponseDTO pdfPreviewResponseDTO = jobCardService.updateJobCard(dto);
 
         return ResponseEntity.ok(
                 new StandardResponse(
                         HttpStatus.OK.value(),
                         "Job Card updated successfully",
-                        pdfBytes
+                        pdfPreviewResponseDTO
                 )
         );
     }
@@ -88,13 +85,13 @@ public class JobCardController {
     @GetMapping("/get-job-card-pdf-by-jobId/{jobId}")
     public ResponseEntity<StandardResponse> getJobCardPdfById(@PathVariable Long jobId) {
 
-        byte[] pdfBytes = jobCardService.getJobCardPdfById(jobId);
+        PdfPreviewResponseDTO pdfPreviewResponseDTO = jobCardService.getJobCardPdfById(jobId);
 
         return ResponseEntity.ok(
                 new StandardResponse(
                         HttpStatus.OK.value(),
                         "Job Card PDF fetched successfully",
-                        pdfBytes
+                        pdfPreviewResponseDTO
                 )
         );
     }

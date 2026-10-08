@@ -3,10 +3,7 @@ package com.revHub.service;
 import com.revHub.dto.request.JobCardModifyRequestDTO;
 import com.revHub.dto.request.JobCardSaveRequestDTO;
 import com.revHub.dto.request.JobCardSearchRequestDTO;
-import com.revHub.dto.response.JobCardNumberResponseDTO;
-import com.revHub.dto.response.JobCardResponseDto;
-import com.revHub.dto.response.JobCardResponseProjection;
-import com.revHub.dto.response.JobCardTableViewResponseDTO;
+import com.revHub.dto.response.*;
 import com.revHub.util.StandardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +13,9 @@ import java.util.List;
 
 public interface JobCardService {
 
-    byte[] saveJobCard(JobCardSaveRequestDTO dto);
+    PdfPreviewResponseDTO saveJobCard(JobCardSaveRequestDTO dto);
 
-    byte[] updateJobCard(JobCardModifyRequestDTO dto);
+    PdfPreviewResponseDTO updateJobCard(JobCardModifyRequestDTO dto);
 
     Page<JobCardResponseProjection> getAllJobCardPaginated(int page, int size);
 
@@ -26,7 +23,7 @@ public interface JobCardService {
 
     Page<JobCardTableViewResponseDTO> searchJobCards(JobCardSearchRequestDTO request, Pageable pageable);
 
-    byte[] getJobCardPdfById(Long jobId);
+    PdfPreviewResponseDTO getJobCardPdfById(Long jobId);
 
     List<JobCardNumberResponseDTO> getPendingJobNumbers();
 }
