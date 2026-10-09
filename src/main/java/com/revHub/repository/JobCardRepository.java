@@ -33,7 +33,8 @@ public interface JobCardRepository extends JpaRepository<JobCard, Long> {
 
     @Query(value = "SELECT " +
             "SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS pendingCount, " +
-            "SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS rejectedCount, " +
+            "SUM(CASE WHEN status = 'IN PROGRESS' THEN 1 ELSE 0 END) AS inProgressCount, " +
+            "SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) AS cancelledCount, " +
             "SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS completedCount " +
             "FROM job_card", nativeQuery = true)
     Map<String, JobCardStatusResponseProjection> getJobCardStatusCounts();
