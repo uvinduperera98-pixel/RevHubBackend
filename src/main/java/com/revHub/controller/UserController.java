@@ -7,6 +7,7 @@ import com.revHub.dto.request.UserSearchRequestDTO;
 import com.revHub.dto.response.UserIdNameResponseDto;
 import com.revHub.dto.response.UserTableViewResponseDTO;
 import com.revHub.entity.User;
+import com.revHub.dto.response.RoleNameResponseDTO;
 import com.revHub.dto.response.SecurityUserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -38,10 +40,23 @@ public class UserController {
     public ResponseEntity<StandardResponse> saveUserDetails(@Valid @RequestBody UserSaveRequestDTO userSaveRequestDTO) {
         User savedUser = userService.saveUserDetails(userSaveRequestDTO);
 
+        List<RoleNameResponseDTO> roleDtos = savedUser.getRoles().stream()
+                .map(role -> new RoleNameResponseDTO(role.getRoleId(), role.getRoleName()))
+                .collect(Collectors.toList());
+
+        UserTableViewResponseDTO responseDto = new UserTableViewResponseDTO(
+                savedUser.getUserId(),
+                savedUser.getUsername(),
+                savedUser.getFullName(),
+                savedUser.getSpeciality(),
+                roleDtos,
+                savedUser.isActive()
+        );
+
         return ResponseEntity.status(HttpStatus.CREATED).body(new StandardResponse(
                 HttpStatus.CREATED.value(),
                 "User saved successfully",
-                savedUser
+                responseDto
         ));
     }
 
