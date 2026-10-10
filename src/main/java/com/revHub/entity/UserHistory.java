@@ -28,9 +28,6 @@ public class UserHistory extends BaseEntity {
     @Column(name = "username", length = 100)
     private String username;
 
-    @Column(name = "password", length = 255)
-    private String password;
-
     @Column(name = "full_name", length = 255)
     private String fullName;
 
