@@ -166,7 +166,6 @@ public class UserServiceImpl implements UserService {
         UserHistory history = new UserHistory();
         history.setUserId(user.getUserId());
         history.setUsername(user.getUsername());
-        history.setPassword(user.getPassword());
         history.setFullName(user.getFullName());
         history.setEmail(user.getEmail());
         history.setSpeciality(user.getSpeciality());
@@ -206,13 +205,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changePassword(ChangePasswordRequestDTO dto) {
+    public void changePassword(Long authenticatedUserId, ChangePasswordRequestDTO dto) {
 
-        User user = userRepository.findByUsername(dto.getUsername())
+        User user = userRepository.findById(authenticatedUserId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
             throw new BadRequestException("Current password is incorrect");
+        }
+
+        if (passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
+            throw new BadRequestException("New password must be different from current password");
         }
 
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
