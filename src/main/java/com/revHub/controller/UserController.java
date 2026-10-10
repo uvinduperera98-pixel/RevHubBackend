@@ -7,6 +7,9 @@ import com.revHub.dto.request.UserSearchRequestDTO;
 import com.revHub.dto.response.UserIdNameResponseDto;
 import com.revHub.dto.response.UserTableViewResponseDTO;
 import com.revHub.entity.User;
+import com.revHub.dto.response.SecurityUserPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.revHub.service.UserService;
 import com.revHub.util.StandardResponse;
 import jakarta.validation.Valid;
@@ -30,6 +33,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<StandardResponse> saveUserDetails(@Valid @RequestBody UserSaveRequestDTO userSaveRequestDTO) {
         User savedUser = userService.saveUserDetails(userSaveRequestDTO);
@@ -41,6 +45,7 @@ public class UserController {
         ));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNISION')")
     @PostMapping("/search")
     public ResponseEntity<StandardResponse> searchUserSummaries(
             @RequestBody UserSearchRequestDTO request,
@@ -55,12 +60,14 @@ public class UserController {
         ));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-user-by-userId/{userId}")
     public ResponseEntity<StandardResponse> getUserById(@PathVariable Long userId) {
         UserTableViewResponseDTO user = userService.getUserById(userId);
         return ResponseEntity.ok(new StandardResponse(HttpStatus.OK.value(), "Success", user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/modify")
     public ResponseEntity<StandardResponse> updateUser(@RequestBody UserModifyRequestDTO dto) {
         userService.updateUser(dto);
@@ -72,6 +79,7 @@ public class UserController {
         ));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-all-user-names")
     public ResponseEntity<StandardResponse> getAllUserNameList() {
         List<UserIdNameResponseDto> userList = userService.getAllUserNameList();
@@ -85,8 +93,10 @@ public class UserController {
 
     // New change password endpoint
     @PutMapping("/change-password")
-    public ResponseEntity<StandardResponse> changePassword(@RequestBody ChangePasswordRequestDTO dto) {
-        userService.changePassword(dto);
+    public ResponseEntity<StandardResponse> changePassword(
+            @Valid @RequestBody ChangePasswordRequestDTO dto,
+            @AuthenticationPrincipal SecurityUserPrincipal principal) {
+        userService.changePassword(principal.userId(), dto);
 
         return ResponseEntity.ok(new StandardResponse(
                 HttpStatus.OK.value(),
