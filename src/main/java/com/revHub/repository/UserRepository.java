@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.userId = :userId")
     Optional<User> findUserWithRolesById(@Param("userId") Long userId);
 
-    @Query("SELECT u FROM User u WHERE u.username = :username")
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
 
     @Query("SELECT u.userId, u.username FROM User u WHERE u.username IS NOT NULL AND TRIM(u.username) <> '' AND u.username <> 'N/A'")
