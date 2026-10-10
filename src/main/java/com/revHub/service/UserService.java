@@ -25,5 +25,5 @@ public interface UserService {
 
     List<UserIdNameResponseDto> getAllUserNameList();
 
-    void changePassword(ChangePasswordRequestDTO dto);
+    void changePassword(Long authenticatedUserId, ChangePasswordRequestDTO dto);
 }
