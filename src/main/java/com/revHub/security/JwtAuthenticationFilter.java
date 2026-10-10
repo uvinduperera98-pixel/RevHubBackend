@@ -70,14 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                         .map(role -> role.getRoleName().trim().toUpperCase(Locale.ROOT))
-                        .map(roleName -> {
-                            // Accept the spelling used in some existing data, but normalize
-                            // both TECHNISION and TECHNICIAN to the same Spring authority.
-                            if ("TECHNISION".equals(roleName)) {
-                                roleName = "TECHNICIAN";
-                            }
-                            return new SimpleGrantedAuthority("ROLE_" + roleName);
-                        })
+                        .map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName))
                         .toList();
 
                 UsernamePasswordAuthenticationToken authentication =
