@@ -4,6 +4,7 @@ import com.revHub.dto.request.RoleSaveRequestDTO;
 import com.revHub.dto.request.RoleSearchRequestDTO;
 import com.revHub.dto.response.RoleNameResponseDTO;
 import com.revHub.service.RoleService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.revHub.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +23,13 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<StandardResponse> saveRole(@RequestBody RoleSaveRequestDTO roleSaveRequestDTO) {
         return roleService.saveRole(roleSaveRequestDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/search")
     public ResponseEntity<StandardResponse> searchRole(
             @RequestBody RoleSearchRequestDTO request,
@@ -40,6 +43,7 @@ public class RoleController {
         return roleService.searchRole(request, pageable);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNISION')")
     @GetMapping("/get-all-role-names")
     public ResponseEntity<StandardResponse> getAllRoleNames() {
 
