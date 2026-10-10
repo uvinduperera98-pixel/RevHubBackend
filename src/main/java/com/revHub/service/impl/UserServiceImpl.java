@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
 
         boolean isTechnician = savedUser.getRoles().stream()
-                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("TECHNICIAN"));
+                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("TECHNISION"));
 
         if (isTechnician) {
             Technician technician = new Technician();
